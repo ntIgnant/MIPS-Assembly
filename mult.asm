@@ -1,64 +1,56 @@
-# The idea of this simple program is to sum up two numbers and then multiply the resultant number by itself
-
 .data
-    # I'll load specific values to the variables (FOR FUN OMAGAAAAA)
-
-    #local variables num1 ad num2
-    num1: .word 11
-    num2: .word 33 
+    num1: .word 11       # First number
+    num2: .word 33       # Second number
 
 .text
-
 .globl main
 
 main:
-    # load word/data of num1 and num2 into s0 and s1 registers
+    # Load num1 and num2 into $s0 and $s1
     lw $s0, num1
     lw $s1, num2
 
+    # Call the sum function
     jal sum
 
-    j exit  # jump to exit function to terminate the program
-
+    # Exit the program
+    j exit
 
 sum:
-    # save the position of the address of the caller 'main' in the stack    REFERENCE type shiii
-    
-    # like 'set the stack position shifted -4' to have a gap of 4 bytes between the next addres and the address to go back to main
+    # Save $ra to the stack (to return to main)
+    addi $sp, $sp, -4    # Allocate 4 bytes on the stack
+    sw $ra, 0($sp)       # Save $ra to the stack
 
-    addi $sp, $sp, -4   # shift -4 downwards
-    sw $ra, 0($sp)  # save the address to 'main' in the stack
-    
-    add $s0, $s0, $s1   # new value of $s0 will be s0 + s1 register (s0 + s1 = 44)
+    # Add $s0 and $s1, store result in $t0
+    add $t0, $s0, $s1    # $t0 = $s0 + $s1 (11 + 33 = 44)
 
-    move $a0, $s0   # move/assig the value of s0 to the argument-type register a0
-
-    # print the current value of a0 (44)
-    li $v0, 1
+    # Print the result of the sum
+    move $a0, $t0        # Move the result to $a0 for printing
+    li $v0, 1            # Syscall for print integer
     syscall
 
-    jal mult  # jump to the next function
+    # Call the mult function with the result of the sum
+    move $a0, $t0        # Pass the result of the sum to $a0
+    jal mult             # Call mult function
 
-    # go back to the stack possition where the addres to main remains (+4 in stack location)
-    lw $ra 0($sp)   #load the returned address from 'mult' into ra
-    # shift stack pointer to +4 to go back to where the address to 'main' is stored
-    addi $sp, $sp, 4    #shift it +4 to go back to main address
+    # Restore $ra from the stack and return to main
+    lw $ra, 0($sp)       # Restore $ra from the stack
+    addi $sp, $sp, 4     # Deallocate 4 bytes from the stack
 
-    jr $ra  # jump back to main yessirrrr
-        
+    jr $ra               # Return to main
 
 mult:
-    mul $v0, $v0, $v0   # multiply the value of the returning-val ree
-    move $a0, $v0   # move the value of v0 to agument-type register a0
+    # Multiply $a0 by itself, store result in $v0
+    mul $v0, $a0, $a0    # $v0 = $a0 * $a0 (44 * 44 = 1936)
 
-    # print the current value of a0
-    li $v0, 1   # this should be 44 * 44
+    # Print the result of the multiplication
+    move $a0, $v0        # Move the result to $a0 for printing
+    li $v0, 1            # Syscall for print integer
     syscall
 
-    jr $ra # jump back to caller 'sum'
-
+    jr $ra               # Return to sum
 
 exit:
-    # exit ;p
-    li $v0, 10
+    # Exit the program
+    li $v0, 10           # Syscall for exit
     syscall
