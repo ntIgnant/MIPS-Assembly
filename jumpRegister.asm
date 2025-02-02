@@ -9,7 +9,7 @@ main:
     li $s0, 10
     li $s1, 11
 
-    jal sumVars  # jump and link (to jump back to the caller, and use $ra "return address" the jal is needed, because it jumps to the label and saves/links the return address n $ra register)
+    jal sumVars  #jump and link (to jump back to the caller, and use $ra "return address" the jal is needed, because it jumps to the label and saves/links the return address n $ra register)
 
     #now the flow should continue after jumping back from sumVars 1 time
     addi $s0, $s0, 10    # now the value of s0 should be the value of the sumVars (21) plus 10, so (31)
