@@ -1,6 +1,6 @@
 .data
     # local variables (stack)
-    num1: .word 10
+    num1: .word -8
 
     #ascii messages
     pos_msg: .asciiz "Possitive\n"
@@ -28,7 +28,7 @@ main:
 
 
 is_zero:
-    lw $t1, zero_msg    # load the value of 'zero_msg' into temp-register t1
+    la $t1, zero_msg    # load the value of 'zero_msg' into temp-register t1
     move $a0, $t1   # move the value to an argument-type register
     li $v0, 4   # load 4 in retyrn-type register to print a string
     syscall
@@ -37,7 +37,7 @@ is_zero:
 
 
 is_negative:
-    lw $t1, neg_msg # load the value of 'neg_msg' into temp-type register t1
+    la $t1, neg_msg # load the value of 'neg_msg' into temp-type register t1
     move $a0, $t1   # move the value of t1 into the argument-type register a0
     li $v0, 4   # load '4' as value int the return-type register to print a string
     syscall
@@ -46,7 +46,9 @@ is_negative:
 
 
 is_possitive:
-    lw $t1, pos_msg # load the value of 'pos_msg' into the temp-type register t1
+    la $t1, pos_msg # load the address of 'pos_msg' into the temp-type register t1
+    # strings are stored as addresses, not as values because they are 'arrays of characters'
+    
     move $a0, $t1   # move the value into an argument-type register
     li $v0, 4   # load '4' as value for the return-type register v0 to print out a string (the message declared in .data)
     syscall
