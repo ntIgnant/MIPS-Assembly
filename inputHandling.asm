@@ -21,13 +21,14 @@ main:
     move $t0, $v0   # store the value of the return-type register into the t0 temp-type register
 
     # print the final message (msg2) with the prompted number
-    la $a0, msg1
+    la $a0, msg2
     li $v0, 4   # load '4' to print out a string
     syscall
 
     # print the number
     move $a0, $t0   # move the stored number in t0, into an argument-type register
     li $v0, 1   # load '1' to print out the integer
+    syscall
 
     j exit  # jump to exit to terminate the program
 
