@@ -7,7 +7,6 @@
 	.globl main
 	
 	
-	
 	main:
 	# your code goes here	# your comments go over here
 	lw $s0, n_num	#load the value of n_num into store-register s0
