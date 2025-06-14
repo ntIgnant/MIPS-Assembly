@@ -1,11 +1,11 @@
 .data
-msg: .asiiz "Looping Down...\n" 
+msg: .asciiz "Looping Down...\n" 
 
 .text
 .globl main
 
 main:
-la $a0, msg
+la $s0, msg
 li $s1, 8
 li $s2, 0
 
